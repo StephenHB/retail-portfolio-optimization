@@ -5,7 +5,7 @@
 **Venue**: *Review of Managerial Science* 14(5), 1009–1027 (2020)  
 **DOI**: [10.1007/s11846-018-0315-y](https://doi.org/10.1007/s11846-018-0315-y)
 
-**Local PDF (expected path)**: `research/papers/Brzezcek_2020_RMS_portfolio_sales_risk_width_diversity.pdf` — *not present in this clone when this note was written*; this document combines the publisher abstract (via [IDEAS/RePEc](https://ideas.repec.org/a/spr/rvmgts/v14y2020i5d10.1007_s11846-018-0315-y.html)), the project index in `README.md`, and standard portfolio–forecast notation. Re-read the PDF when available to align symbols with the paper’s sections.
+**Local PDF (in repo)**: [Brzezcek_2020_RMS_portfolio_sales_risk_width_diversity.pdf](Brzezcek_2020_RMS_portfolio_sales_risk_width_diversity.pdf). This note also draws on the publisher abstract ([IDEAS/RePEc](https://ideas.repec.org/a/spr/rvmgts/v14y2020i5d10.1007_s11846-018-0315-y.html)), the project index in [`README.md`](README.md), and standard portfolio–forecast notation; prefer the PDF for exact equations and aggregation details.
 
 ---
 

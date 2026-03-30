@@ -4,7 +4,7 @@ PDFs in this folder are project references. Prefer citing the canonical copy her
 
 ## 1. Brzęczek (2020) — product portfolio sales and forecast risk
 
-- **File**: [Brzezcek_2020_RMS_portfolio_sales_risk_width_diversity.pdf](Brzezcek_2020_RMS_portfolio_sales_risk_width_diversity.pdf)  
+- **File**: [Brzezcek_2020_RMS_portfolio_sales_risk_width_diversity.pdf](Brzezcek_2020_RMS_portfolio_sales_risk_width_diversity.pdf) (tracked in git; open from the repo or GitHub file view)  
 - **Title**: *Optimisation of product portfolio sales and their risk subject to product width and diversity*  
 - **Venue**: *Review of Managerial Science* 14, 1009–1027 (2020)  
 - **DOI**: [10.1007/s11846-018-0315-y](https://doi.org/10.1007/s11846-018-0315-y)  
