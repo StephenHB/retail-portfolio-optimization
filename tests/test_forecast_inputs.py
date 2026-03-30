@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 
 from retail_portfolio.data.forecast_inputs import (
+    correlation_from_covariance,
     mu_sigma_from_residual_matrix,
     wide_residual_matrix_from_long,
 )
@@ -34,6 +35,13 @@ def test_mu_sigma_from_residual_matrix_diagonal_independent() -> None:
     assert np.allclose(y, mu)
     sample = np.cov(r, rowvar=False, ddof=1)
     assert np.allclose(sigma, sample)
+
+
+def test_correlation_from_covariance_unit_diagonal() -> None:
+    sigma = np.array([[4.0, 1.0], [1.0, 9.0]])
+    corr = correlation_from_covariance(sigma)
+    assert np.allclose(np.diag(corr), 1.0)
+    assert np.isclose(corr[0, 1], 1.0 / (2.0 * 3.0))
 
 
 def test_mu_sigma_from_residual_matrix_shape_errors() -> None:

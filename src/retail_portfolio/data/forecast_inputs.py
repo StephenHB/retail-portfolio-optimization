@@ -10,6 +10,13 @@ import numpy as np
 import pandas as pd
 
 
+def correlation_from_covariance(sigma: np.ndarray, *, eps: float = 1e-12) -> np.ndarray:
+    """Symmetric correlation matrix from a covariance matrix (diag → 1)."""
+    sigma = np.asarray(sigma, dtype=float)
+    d = np.sqrt(np.clip(np.diag(sigma), eps, None))
+    return sigma / np.outer(d, d)
+
+
 def wide_residual_matrix_from_long(
     df: pd.DataFrame,
     *,

@@ -10,7 +10,7 @@ Retail portfolio optimization (demo data + research-driven methods). This branch
 
 ## Demo data (Kaggle)
 
-Primary demo dataset: **[Retail Insights: A Comprehensive Sales Dataset](https://www.kaggle.com/datasets/rajneesh231/retail-insights-a-comprehensive-sales-dataset)** (author: `rajneesh231` on Kaggle). Download via the [Kaggle API](https://www.kaggle.com/docs/api) or the dataset page and extract files under `data/raw/` (that folder is gitignored except `.gitkeep`).
+Primary demo dataset: **[Retail Insights: A Comprehensive Sales Dataset](https://www.kaggle.com/datasets/rajneesh231/retail-insights-a-comprehensive-sales-dataset)** (author: `rajneesh231` on Kaggle). Download via the [Kaggle API](https://www.kaggle.com/docs/api) or the dataset page and extract `data.csv` under `data/raw/` (that folder is gitignored except `.gitkeep`). The Brzęczek demo figure then defaults to this file: `PYTHONPATH=src python scripts/visualize_brzezcek_demo.py` (use `--synthetic` for the RNG-only demo).
 
 ## Research PDFs
 

@@ -1,10 +1,27 @@
 # Brzęczek demo: data summary and numeric results
 
-This document describes the **synthetic** inputs behind [`brzezcek_demo.png`](brzezcek_demo.png) and the **exact numbers** produced by `retail_portfolio` for that setup (default RNG seed **42**). It is **not** empirical retail data—only a reproducible illustration.
+This document covers two ways to build [`brzezcek_demo.png`](brzezcek_demo.png):
+
+1. **Kaggle (default for `scripts/visualize_brzezcek_demo.py`)** — [*Retail Insights: A Comprehensive Sales Dataset*](https://www.kaggle.com/datasets/rajneesh231/retail-insights-a-comprehensive-sales-dataset). Put `data.csv` in `data/raw/` (unzip if needed). The adapter lives in [`src/retail_portfolio/data/kaggle_retail_insights.py`](../src/retail_portfolio/data/kaggle_retail_insights.py).
+2. **Synthetic** — pass `--synthetic` to the script; six categories from `numpy.random.Generator(42)` as before.
 
 ---
 
-## 1. Data summary
+## Kaggle pipeline (default)
+
+- **Columns used:** `Order Date`, `Product Category`, `Order Total` (currency strings with `$` / commas).
+- **Dates:** parsed with `dayfirst=True` (dataset is AU-style).
+- **Panel:** sum `Order Total` by calendar month × category → wide matrix of monthly revenue.
+- **y\* (point “forecast”):** revenue in the **last** month of the panel per category (carry-forward / random-walk level).
+- **Residuals for V:** month-to-month first difference per category (innovations of a naïve random-walk forecast); **V** = sample covariance of those innovations across time (`mu_sigma_from_residual_matrix`).
+- **Correlation heatmap:** `correlation_from_covariance(V)`.
+
+Run: `PYTHONPATH=src python scripts/visualize_brzezcek_demo.py`  
+Synthetic: add `--synthetic`. Custom path: `--data /path/to/data.csv`.
+
+---
+
+## 1. Synthetic mode — data summary
 
 ### 1.1 Categories
 
@@ -49,7 +66,7 @@ Meta-objective: **x′y\* − w · t · √(x′Vx)** (`meta_objective_profit_sa
 
 ---
 
-## 2. Demo results
+## 2. Synthetic mode — demo results
 
 ### 2.1 Baseline portfolio (marginal-add panel)
 
@@ -111,10 +128,14 @@ Bars are ordered by descending forecast sales. Labels **P*k*** correspond to por
 ## 3. How to reproduce
 
 ```bash
+# Kaggle CSV at data/raw/data.csv (default)
 PYTHONPATH=src python scripts/visualize_brzezcek_demo.py
+
+# Synthetic six-category demo
+PYTHONPATH=src python scripts/visualize_brzezcek_demo.py --synthetic
 ```
 
-To recompute tables in Python, import `synthetic_demo_inputs` and the functions in `retail_portfolio.brzezcek_portfolio` as in `src/retail_portfolio/viz/brzezcek_demo.py`.
+To recompute **synthetic** tables in Python, import `synthetic_demo_inputs` from `retail_portfolio.viz.brzezcek_demo`. For **Kaggle** inputs, use `brzezcek_inputs_from_retail_insights_csv` from `retail_portfolio.data.kaggle_retail_insights`.
 
 ---
 
@@ -122,6 +143,7 @@ To recompute tables in Python, import `synthetic_demo_inputs` and the functions 
 
 | Piece | Location |
 |-------|----------|
-| Synthetic data + figure | `src/retail_portfolio/viz/brzezcek_demo.py` |
+| Synthetic + figure | `src/retail_portfolio/viz/brzezcek_demo.py` |
+| Kaggle adapter | `src/retail_portfolio/data/kaggle_retail_insights.py` |
 | Portfolio math | `src/retail_portfolio/brzezcek_portfolio.py` |
 | Script | `scripts/visualize_brzezcek_demo.py` |

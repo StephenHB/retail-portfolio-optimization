@@ -32,5 +32,5 @@ def test_make_figure_runs(tmp_path: Path) -> None:
 
 
 def test_save_brzezcek_demo(tmp_path: Path) -> None:
-    path = save_brzezcek_demo(tmp_path / "x.png")
+    path = save_brzezcek_demo(tmp_path / "x.png", use_synthetic=True)
     assert path.exists() and path.stat().st_size > 1000

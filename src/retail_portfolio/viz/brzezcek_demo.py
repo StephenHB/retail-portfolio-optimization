@@ -20,6 +20,10 @@ from retail_portfolio.brzezcek_portfolio import (
     score_marginal_adds,
     t_critical_student,
 )
+from retail_portfolio.data.kaggle_retail_insights import (
+    brzezcek_inputs_from_retail_insights_csv,
+    resolve_retail_insights_csv,
+)
 
 
 def synthetic_demo_inputs(
@@ -71,6 +75,7 @@ def make_brzezcek_demo_figure(
     w_safety: float = 0.35,
     alpha_t: float = 0.05,
     df_t: float = 24.0,
+    suptitle: str | None = None,
 ):
     """
     Create a 2x2 matplotlib figure: correlation heatmap, sales vs risk scatter,
@@ -80,12 +85,17 @@ def make_brzezcek_demo_figure(
     ----------
     baseline_x :
         Binary mask for marginal-add panel; default first three categories on.
+    suptitle :
+        Figure title; default text refers to synthetic-style demos.
     """
     import matplotlib.pyplot as plt
 
     n = len(labels)
     if baseline_x is None:
-        baseline_x = np.array([1, 1, 1, 0, 0, 0][:n], dtype=int)
+        # Leave ≥1 category off when possible so marginal-add scores are defined.
+        n_on = max(1, min(3, n - 1)) if n > 1 else 1
+        baseline_x = np.zeros(n, dtype=int)
+        baseline_x[:n_on] = 1
     baseline_x = np.asarray(baseline_x, dtype=int).reshape(-1)
     if baseline_x.shape[0] != n:
         raise ValueError("baseline_x length must match labels")
@@ -118,7 +128,9 @@ def make_brzezcek_demo_figure(
 
     fig, axes = plt.subplots(2, 2, figsize=(11, 9))
     fig.suptitle(
-        "Brzęczek-style demo: library outputs on synthetic categories",
+        suptitle
+        if suptitle is not None
+        else "Brzęczek-style demo: library outputs on synthetic categories",
         fontsize=12,
     )
 
@@ -204,14 +216,35 @@ def save_brzezcek_demo(
     *,
     dpi: int = 120,
     rng: np.random.Generator | None = None,
+    data_csv: str | Path | None = None,
+    use_synthetic: bool = False,
+    suptitle: str | None = None,
 ) -> Path:
-    """Generate synthetic inputs, build figure, save to *out_path* (PNG or PDF)."""
+    """
+    Build figure and save to *out_path*.
+
+    By default uses Kaggle *Retail Insights* CSV: *data_csv* if provided, else
+    `resolve_retail_insights_csv()`. Set ``use_synthetic=True`` for the original
+    RNG-based demo.
+    """
     import matplotlib.pyplot as plt
 
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    y_star, v, corr, labels = synthetic_demo_inputs(rng=rng)
-    fig = make_brzezcek_demo_figure(y_star, v, corr, labels)
+    if use_synthetic:
+        y_star, v, corr, labels = synthetic_demo_inputs(rng=rng)
+        st = suptitle or "Brzęczek-style demo: library outputs on synthetic categories"
+    else:
+        csv_path = Path(data_csv) if data_csv is not None else resolve_retail_insights_csv()
+        y_star, v, corr, labels, meta = brzezcek_inputs_from_retail_insights_csv(
+            csv_path
+        )
+        st = suptitle or (
+            "Brzęczek-style demo: Kaggle retail insights — monthly revenue by category\n"
+            f"{meta['period_start']} → {meta['period_end']} "
+            f"({meta['n_categories']} categories, {meta['n_months']} months)"
+        )
+    fig = make_brzezcek_demo_figure(y_star, v, corr, labels, suptitle=st)
     fig.savefig(out_path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
     return out_path
