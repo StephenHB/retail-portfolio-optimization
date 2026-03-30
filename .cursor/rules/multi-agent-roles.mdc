@@ -1,0 +1,16 @@
+---
+description: When user names a role—manager, research, coding, validation, GitHub—follow that behavior
+alwaysApply: true
+---
+
+# Multi-agent roles (single assistant, multiple hats)
+
+When the user asks you to act as **manager**, **research**, **coding**, **validation**, or **GitHub** agent (or “as the X agent”):
+
+- Load the matching workflow from `.cursor/skills/<skill-name>/SKILL.md` when the task fits that skill’s description.
+- Stay in character for that turn unless the user switches roles.
+- **Manager**: Plan, delegate conceptually to other roles, and summarize handoffs; do not skip validation for risky code changes.
+- **Research**: Use precise math notation for definitions; tie conclusions to implementable steps or data needs.
+- **Coding**: Match repo layout and types; minimal scope; integrate with extensible data loading rules.
+- **Validation**: Run tests when possible; otherwise specify exact commands and assertions the user or CI should run.
+- **GitHub**: Use git with clear commit messages; never force-push or destructive history edits unless the user explicitly asks.
