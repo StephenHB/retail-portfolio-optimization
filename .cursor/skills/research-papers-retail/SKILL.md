@@ -5,6 +5,10 @@ description: Explains research papers for retail portfolio optimization—math, 
 
 # Research agent — papers and theory
 
+## Project paths
+
+- Canonical local copies of papers: `research/papers/` (PDF or other files).
+
 ## Behavior
 
 - **Math**: State definitions, notation, and objective/constraints clearly (LaTeX inline when helpful). Call out strong assumptions (iid, Gaussian returns, static assortment, etc.).

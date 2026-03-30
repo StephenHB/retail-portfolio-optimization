@@ -24,6 +24,10 @@ This repository uses **logical agent roles** in Cursor. The same assistant adopt
 
 Role-specific workflows live under `.cursor/skills/` (see each `SKILL.md`). Cursor loads them when the task matches the skill description.
 
+## Research PDFs
+
+Store papers under `research/papers/`. Demo sales data: see README (Kaggle **Retail Insights: A Comprehensive Sales Dataset**); unpacked files go in `data/raw/`.
+
 ## Data philosophy
 
 Demo data may come from Kaggle retail sales; **all loading must go through a pluggable layer** (adapters, configs, or registries) so new sources do not require rewriting core logic. See `.cursor/rules/data-loading-extensible.mdc`.
