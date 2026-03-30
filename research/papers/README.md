@@ -12,6 +12,6 @@ PDFs in this folder are project references. Prefer citing the canonical copy her
 
 **Core idea**: Extend Markowitz-style portfolio thinking to **product categories** (binary include/exclude decisions), with **risk** defined via **forecast error** (residuals from time-series models), not financial returns. Models minimise nominal or **relative** forecast error, or maximise a **profit-style meta-objective** (forecasted sales minus a safety-stock cost linked to forecast error and a \(t\)-distribution critical value).
 
-**Relevance to this repo**: Pairs naturally with **category-level** sales panels (e.g. Kaggle retail demo mapped to categories); implementation needs **forecasts + residual covariance** per category and horizon, then small **binary quadratic** problems (expand/contract by one category at a time in the paper).
+**Relevance to this repo**: Pairs naturally with **category-level** sales panels (e.g. Kaggle retail demo mapped to categories); implementation needs **forecasts + residual covariance** per category and horizon, then small **binary quadratic** problems (expand/contract by one category at a time in the paper). **Code:** `src/retail_portfolio/`; **demo data notes:** [`data/README.md`](../../data/README.md).
 
 **Limitation called out in paper**: Results are for **marginal** width changes; full combinatorial assortment search would need extra structure or heuristics.

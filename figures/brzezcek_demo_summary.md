@@ -2,6 +2,8 @@
 
 This file documents [`brzezcek_demo.png`](brzezcek_demo.png). **Regenerated: 2026-03-30.**
 
+**Dataset overview:** [`../data/README.md`](../data/README.md).
+
 The committed PNG is built from whatever sits at **`data/raw/data.csv`** when you run the script (Kaggle *Retail Insights* schema). If that file is missing, use `--synthetic` or download the dataset (see [README](../README.md)). **All Kaggle numbers below reflect the current local CSV** (5,000 rows → 49 monthly buckets in this run).
 
 ---
