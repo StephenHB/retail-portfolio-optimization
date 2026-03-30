@@ -2,6 +2,8 @@
 """
 Write Brzęczek demo figures under figures/ (synthetic data + retail_portfolio outputs).
 
+Numeric write-up: figures/brzezcek_demo_summary.md
+
 Usage (from repo root):
   PYTHONPATH=src python scripts/visualize_brzezcek_demo.py
 """
