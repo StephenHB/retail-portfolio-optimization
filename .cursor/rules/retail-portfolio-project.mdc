@@ -1,0 +1,21 @@
+---
+description: Core goals and stack for retail portfolio optimization
+alwaysApply: true
+---
+
+# Retail portfolio optimization
+
+## Goals
+
+- Portfolio-style decisions over retail SKUs, stores, or categories (assortment, allocation, risk/return framing as the project defines).
+- **Reproducible Python**: prefer `pandas`/`numpy` for data; keep analysis logic out of huge notebook blobs when possible (import from `src/` or equivalent once it exists).
+
+## Data sources
+
+- **Demo**: Kaggle retail sales datasets are acceptable defaults.
+- **Extension**: New sources must plug in via explicit loaders or a small registry pattern—no hard-coded paths or Kaggle-only assumptions in core optimization code.
+
+## Quality bar
+
+- Prefer vectorized pandas/numpy over tight Python loops for large tables.
+- When adding statistical or ML methods, note assumptions and validate on holdout or CV where appropriate.

@@ -1,0 +1,24 @@
+---
+description: Pluggable data loading; Kaggle demo, other sources via adapters
+globs: "**/*.py"
+alwaysApply: false
+---
+
+# Extensible data loading
+
+## Pattern
+
+- Define a **narrow internal schema** (e.g. transactions, products, stores, dates) that downstream optimization code consumes.
+- Implement **source adapters** that map raw files/APIs to that schema (one module or class per source).
+- **Configuration** (paths, dataset id, date ranges) lives outside adapter code when practical (env, YAML, or CLI args).
+
+## Anti-patterns
+
+- Importing Kaggle-specific paths or column names in optimization or model modules.
+- Duplicating join/clean logic across notebooks instead of shared loader functions.
+
+## Adding a source
+
+1. Add adapter under `src/.../data/` or `loaders/` (follow whatever structure exists).
+2. Document required columns and date granularity in the adapter docstring.
+3. Expose a single entry point (e.g. `load_retail_dataset(config)`) used by notebooks and scripts.
