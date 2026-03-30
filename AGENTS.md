@@ -26,7 +26,7 @@ Role-specific workflows live under `.cursor/skills/` (see each `SKILL.md`). Curs
 
 ## Research PDFs
 
-Store papers under `research/papers/`. Demo sales data: see README (Kaggle **Retail Insights: A Comprehensive Sales Dataset**); unpacked files go in `data/raw/`.
+Store papers under `research/papers/`. Indexed entries and summaries: `research/papers/README.md`. Demo sales data: see README (Kaggle **Retail Insights: A Comprehensive Sales Dataset**); unpacked files go in `data/raw/`.
 
 ## Data philosophy
 
