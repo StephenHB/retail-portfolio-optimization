@@ -21,7 +21,7 @@ The paper treats **product categories** as portfolio assets: decisions are about
 
 ## 2. Formal problem (reconciled with Brzęczek Sect. 3 / Table 1)
 
-**Indices**: categories $i = 1,\ldots,n$. **Decision**: binary inclusion $x_i \in \{0,1\}$. The paper splits **reduction** (vector $\mathbf{x}_1$ over incumbent categories) vs **expansion** (stack $[\mathbf{x}_1^\top, \mathbf{x}_2^\top]^\top$ with candidates in $\mathbf{x}_2$); code uses a single $\mathbf{x}$ over whichever index set is active, with $V$ sized accordingly ($I\times I$ or $(I+m)\times(I+m)$).
+**Indices**: categories $i = 1,\ldots,n$. **Decision**: binary inclusion $x_i \in \{0,1\}$. The paper splits **reduction** (vector $\mathbf{x}_1$ over incumbent categories) vs **expansion** (stack $[\mathbf{x}_1^\top, \mathbf{x}_2^\top]^\top$ with candidates in $\mathbf{x}_2$); code uses a single $\mathbf{x}$ over whichever index set is active, with $V$ sized accordingly ($I\times I$ or $(I+m)\times (I+m)$).
 
 **Forecast level**: $y_{it}^*$ is the forecast expected sales of category $i$ in period $t$; $\mathbf{y}^*_t$ is the column vector of those forecasts for the relevant set. **Portfolio forecasted sales**: $\mathbf{x}^\top \mathbf{y}^*_t$.
 
