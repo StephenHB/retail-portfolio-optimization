@@ -9,6 +9,8 @@
 
 **Canonical Python**: [`src/retail_portfolio/`](../../src/retail_portfolio/) (import after `pip install -e .` or `PYTHONPATH=src`). Section 5 code blocks below are kept for reading; the package is the maintained source.
 
+**Math in this file:** inline `\(\ldots\)` and display `\[ \ldots \]` (GitHub-flavored Markdown math on github.com). Delimiters are balanced; `\mathbf`, `\mathrm`, `\top`, `\varepsilon`, `\rho`, `\lVert/\rVert`, and `\Big( \Big)` are standard LaTeX.
+
 ---
 
 ## 1. One-paragraph gist
@@ -35,7 +37,7 @@ The paper treats **product categories** as portfolio assets: decisions are about
 
 **Relative risk (models (3)–(4))**: \(\sqrt{\mathbf{x}^\top V \mathbf{x}} \big/ (\mathbf{x}^\top \mathbf{y}^*_t)\) — relative error of **total sales forecasts**, comparable across portfolios with different variety and forecast levels.
 
-**Marginal width**: constraints \(\lVert \mathbf{x}_1 \rVert_1 \ge I-1\) or \(=I\) for reduction and \(\lVert \mathbf{x}_2 \rVert_1 \le 1\) for expansion (at most one category flipped). Compare before/after flips; full \(2^n\) search is outside the paper’s empirical scope.
+**Marginal width**: constraints \(\lVert \mathbf{x}_1 \rVert_1 \ge I-1\) or \(\lVert \mathbf{x}_1 \rVert_1 = I\) for reduction and \(\lVert \mathbf{x}_2 \rVert_1 \le 1\) for expansion (at most one category flipped). Compare before/after flips; full \(2^n\) search is outside the paper’s empirical scope.
 
 **Profit meta-objective (models (5)–(6))**: \(\mathbf{x}^\top \mathbf{y}^*_t - w \, t_{\alpha,\,N-K} \sqrt{\mathbf{x}^\top V \mathbf{x}}\), where \(w\) is the average safety-stock cost per currency unit of sales forecast error at service level tied to \(1-\alpha/2\) (see paper), and \(t_{\alpha,\,N-K}\) is a Student \(t\) critical value with \(N-K\) d.f. (paper: right-tail at significance \(\alpha\); `t_critical_student(..., one_sided_upper=True)` matches that reading; use `one_sided_upper=False` for a two-sided symmetric \(\alpha\) critical value).
 
@@ -44,7 +46,7 @@ The paper treats **product categories** as portfolio assets: decisions are about
 ## 3. Methods / algorithm (bullets)
 
 1. **Forecast** each category’s sales for the decision horizon; collect point forecasts into \(\mathbf{y}^*_t\).
-2. **Residuals** from those forecasts \(\Rightarrow\) estimate **\(V\)** via \(v_{ij}=\rho_{ij}s_is_j\) or sample covariance of aligned residual series (shrinkage if \(n\) is large relative to history).
+2. **Residuals** from those forecasts \(\Rightarrow\) estimate **\(V\)** via \(v_{ij} = \rho_{ij}\, s_i\, s_j\) or sample covariance of aligned residual series (shrinkage if \(n\) is large relative to history).
 3. **Define objectives** (several models in the paper): minimize prediction-error measure, or maximize sales minus risk penalty, under **binary** \(\mathbf{x}\) and constraints reflecting **width** / **diversity** (see paper).
 4. **Evaluate marginal moves**: for “add \(j\)” / “remove \(k\)”, compute \(S(\mathbf{x})\) and the chosen risk functional for \(\mathbf{x}\) before and after the flip.
 5. **Empirical split**: reserve part of the time series for **parameter estimation** and part for **out-of-sample forecast testing** (as described in the abstract).
@@ -61,7 +63,7 @@ The paper treats **product categories** as portfolio assets: decisions are about
 | Out-of-sample forecasts per category | Any time-series or ML forecaster; residuals \(\Rightarrow V\) |
 | Binary assortment decision | Category in / out; not store-SKU mix unless aggregated |
 
-Core optimization code should stay **source-agnostic**: accept `mu`, `Sigma`, and masks \(\mathbf{x}\), not hard-coded column names.
+Core optimization code should stay **source-agnostic**: accept forecast levels (e.g. **`y_star`** / \(\mathbf{y}^*\)) and covariance **\(V\)**, plus binary masks \(\mathbf{x}\), not hard-coded column names.
 
 ---
 
@@ -223,7 +225,7 @@ if __name__ == "__main__":
 ## 6. Implementation status (done)
 
 1. **Notation** — Reconciled with the PDF in §2 and in `brzezcek_portfolio.py` (including \(V\) from \(\rho_{ij}, s_i\), and \(\mathrm{Var}(\sum_i x_i \varepsilon_i)=\mathbf{x}^\top V \mathbf{x}\)).
-2. **Code & tests** — Package [`src/retail_portfolio/`](../../src/retail_portfolio/); tests in `tests/test_brzezcek_portfolio.py` (quadratic form, \(V\) from std/corr, **marginal add increases nominal risk** under diagonal \(V\), relative risk edge cases, meta-objective, \(t\) tails) and `tests/test_forecast_inputs.py` (long \(\to\) wide residuals, sample \(\Sigma\)). Run: `PYTHONPATH=src python -m pytest` (or `pip install -e .` with a current pip/setuptools).
+2. **Code & tests** — Package [`src/retail_portfolio/`](../../src/retail_portfolio/); tests in `tests/test_brzezcek_portfolio.py` (quadratic form, \(V\) from std/corr, **marginal add increases nominal risk** under diagonal \(V\), relative risk edge cases, meta-objective, \(t\) tails) and `tests/test_forecast_inputs.py` (long \(\to\) wide residuals, sample covariance matrix). Run: `PYTHONPATH=src python -m pytest` (or `pip install -e .` with a current pip/setuptools).
 3. **Pluggable loaders** — [`forecast_inputs.py`](../../src/retail_portfolio/data/forecast_inputs.py): `wide_residual_matrix_from_long(...)` takes **column names** only; `mu_sigma_from_residual_matrix(forecast_means, residual_matrix)` pairs \(\mathbf{y}^*\) with sample \(V\). Wire any category–period panel by mapping adapters to those arguments (no Kaggle-specific fields in core logic).
 
 ---
