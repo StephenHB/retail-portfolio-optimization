@@ -203,6 +203,7 @@ def brzezcek_inputs_per_store(
     min_months: int = 6,
     w: float = 1.0,
     t_critical: float = 1.96,
+    forecaster: object | None = None,
 ) -> list[dict]:
     """
     Build one portfolio config per store from a transactions table.
@@ -223,6 +224,10 @@ def brzezcek_inputs_per_store(
         Minimum monthly rows required after differencing.
     w, t_critical : float
         Passed through to ``make_portfolio_config()``.
+    forecaster : Forecaster or None
+        If provided, the wide panel is collected to pandas and passed to
+        ``forecaster.fit(wide_pdf).predict()`` to obtain (y_star, V).
+        If None (default), the built-in naive forecast is used.
 
     Returns
     -------
@@ -264,7 +269,14 @@ def brzezcek_inputs_per_store(
             continue
 
         try:
-            y_star, v, _ = compute_residual_covariance_spark(wide, labels)
+            if forecaster is not None:
+                # Collect to pandas and use the pluggable forecaster
+                wide_pdf = wide.toPandas().sort_values("period").set_index("period")
+                wide_pdf = wide_pdf[labels]
+                result = forecaster.fit(wide_pdf).predict()
+                y_star, v = result.y_star, result.V
+            else:
+                y_star, v, _ = compute_residual_covariance_spark(wide, labels)
         except ValueError:
             continue
 
