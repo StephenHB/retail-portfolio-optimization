@@ -155,6 +155,35 @@ PYTHONPATH=src python -m pytest tests/test_spark_distributed.py -v
 PYTHONPATH=src python -m pytest -m "not spark"
 ```
 
+## Performance benchmarks
+
+Benchmarked on a single core (Apple Silicon), representative of one Spark executor.
+Parameters: **n = 1,000 stores, m = 100 products, k = 30 max selected**.
+
+### Per-store cost (single core)
+
+| Strategy | Time per store | 1,000 stores sequential |
+|----------|---------------|------------------------|
+| **Greedy** (k = 30 steps) | ~17–28 ms | ~28 s |
+| **Random** (10k samples) | ~104 ms | ~104 s |
+| **Random** (100k samples) | ~849 ms | ~14 min |
+
+### Estimated wall-clock with Spark parallelism
+
+| Executors | Greedy (1,000 stores) | Random 10k (1,000 stores) |
+|-----------|-----------------------|---------------------------|
+| 8 | ~2 s | ~13 s |
+| 32 | ~0.5 s | ~3 s |
+| 100 | ~0.2 s | ~1 s |
+
+### Takeaways
+
+- **Greedy is the practical default** at m = 100 — 17 ms per store, under 1 second on a 32-executor cluster for 1,000 stores.
+- **Random search** explores more of the combinatorial space at ~5× the cost; useful when greedy may get stuck in a local optimum.
+- **Exhaustive is impossible** at m = 100 ($2^{100}$ masks). Only viable for m ≤ ~20.
+- Scaling is **linear in executor count** — each store is fully independent (embarrassingly parallel).
+- The meta-objective's diminishing-returns structure (safety-stock penalty grows sub-linearly) means greedy tends to find near-optimal solutions in practice.
+
 ## Relationship to the original single-machine code
 
 The original `brzezcek_portfolio.py` computes the same quadratic forms (`x'y*`, `x'Vx`) and meta-objective for a single portfolio. This spark package:
