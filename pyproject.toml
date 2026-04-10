@@ -16,6 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0", "matplotlib>=3.7"]
+spark = ["pyspark>=3.4"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -23,3 +24,4 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = ["spark: tests requiring a local PySpark session"]

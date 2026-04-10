@@ -17,6 +17,22 @@ PYTHONPATH=src python scripts/visualize_brzezcek_demo.py --synthetic
 
 Python package lives under **`src/retail_portfolio/`** (see `pyproject.toml` for dependencies).
 
+## PySpark distributed optimization
+
+For scaling to **n stores × variable m products** on Databricks / any Spark cluster, see the [`spark/` subpackage](src/retail_portfolio/spark/README.md). Key idea: each store carries a different product set, so each gets its own `(y*, V)` of size `m_i`. Three strategies (greedy, random, exhaustive) parallelise across stores.
+
+```bash
+pip install -e ".[spark]"   # adds pyspark>=3.4
+```
+
+```python
+from retail_portfolio.spark.data_prep import brzezcek_inputs_per_store
+from retail_portfolio.spark.distributed import optimize_n_portfolios
+
+configs = brzezcek_inputs_per_store(sdf, store_col="store_id")
+results = optimize_n_portfolios(spark, configs, strategy="greedy")
+```
+
 ## Cursor agents and rules
 
 - **`AGENTS.md`** — how to use manager, research, coding, validation, and GitHub-oriented workflows in chat.
